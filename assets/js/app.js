@@ -19,7 +19,7 @@ const listRatesURL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchan
             for (let currency of country.currencies){
             if (currency.code == rate.cc){
                 country.rate += rate.rate.toString() + '</br>';
-                country.cc += rate.cc + '</br>';
+                country.cc += rate.cc + ' - ' +rate.txt + '</br>';
                 country.exchangedate = rate.exchangedate;
             }
         }
@@ -29,6 +29,8 @@ const listRatesURL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchan
     
     listFlags = listFlags.filter(item => item.cc != '');
     
+    console.log(listRates);
+
     displayResult(listFlags);
 
 }());
