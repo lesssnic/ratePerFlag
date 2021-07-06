@@ -8,31 +8,43 @@ const listRatesURL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchan
 
     let reqListsArr = await Promise.all([fetch(listFlagsURL), fetch(listRatesURL)]);
 
-    console.log(reqListsArr);
+    reqListsArr = await Promise.all(reqListsArr.map(item => item.json()));
 
-//    let listFlags =  fetch(listFlagsURL);
-//    let listRates =  fetch(listRatesURL);
+    let [listFlags, listRates] = reqListsArr;
+
+    for (let country of listFlags){
+        country.rate = '';
+        country.cc = '';
+        for (let rate of listRates){
+            for (let currency of country.currencies){
+            if (currency.code == rate.cc){
+                country.rate += rate.rate.toString() + '</br>';
+                country.cc += rate.cc + '</br>';
+                country.exchangedate = rate.exchangedate;
+            }
+        }
+        }
+
+    }
     
+    listFlags = listFlags.filter(item => item.cc != '');
+    
+    displayResult(listFlags);
 
-}())
+}());
 
 
 
 
 function displayResult(dataArr){
-    for (item of dataArr){
-        let row = nearestAtm.insertRow();
-      
-        let cell = row.insertCell();
-        let text = document.createTextNode(item.distance);
-        cell.appendChild(text);
+       
+    document.querySelector('#rates') .innerHTML = dataArr.map(item => `
+    <tr>
+        <th><img src="${item.flag}" alt="" width="130" height="100"></th>
+        <th>${item.name}</th>
+        <th>${item.cc}</th>
+        <th>${item.rate}</th>
+        <th>${item.exchangedate}</th>
+    </tr>`).join('');
 
-        cell = row.insertCell();
-        text = document.createTextNode(' - ');
-        cell.appendChild(text);
-
-        cell = row.insertCell();
-        text = document.createTextNode(item.fullAddressRu);
-        cell.appendChild(text);
-      }
 }
