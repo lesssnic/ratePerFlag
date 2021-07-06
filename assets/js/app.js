@@ -29,8 +29,6 @@ const listRatesURL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchan
     
     listFlags = listFlags.filter(item => item.cc != '');
     
-    console.log(listRates);
-
     displayResult(listFlags);
 
 }());
