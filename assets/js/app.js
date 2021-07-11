@@ -4,6 +4,12 @@ const listFlagsURL = 'https://restcountries.eu/rest/v2/all';
 
 const listRatesURL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json';
 
+let template = document.querySelector('template').content;
+
+template = template.firstElementChild.innerHTML;
+
+console.dir(template);
+
 (async function(){
 
     let reqListsArr = await Promise.all([fetch(listFlagsURL), fetch(listRatesURL)]);
